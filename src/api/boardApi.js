@@ -1,4 +1,4 @@
-import axiosInstance from "./AxiosInstance"
+import axiosInstance from "./axiosInstance"
 
 // async, await 비동기함수로 만들어야함
 // api 요청이 가면 기다렸다가 응답이 오면 리턴
