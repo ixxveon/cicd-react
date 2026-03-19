@@ -43,19 +43,19 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::867490540399:role/GitHubActions-React-S3DeployRole
-          aws-region: ap-southeast-2
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       # 6. 빌드된 결과물을 S3에 배포(업로드)
       # 빌드된 결과(dist 폴더)를 S3 버킷과 동기화
       # --delete: dist 폴더에 없는 파일은 제거 (S3에만 있는 파일을 제거)
       - name: Deploy to S3
         run: |
-          aws s3 sync dist s3://korea-it-react-crud --delete
+          aws s3 sync dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
       # 7. CloudFront 캐시 무효화
       - name: Invalidate CloudFront Cache
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id E27LW5BRPHXZZE \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
